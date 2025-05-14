@@ -11,8 +11,6 @@ const getRenderedquotes = (data) => {
                 <p class="qoute">
                     ${quote.quote}
                 </p>
-                <span>
-                </span>
             </div>
         `
     }).join("") || `
@@ -67,7 +65,7 @@ const renderquotes = async() => {
         const quotes = data.quotes;
         loader.classList.add("hidden");
         filter.classList.remove("hidden");
-        quotesCount.textContent = `Quotes ${quotes.length}`;
+        quotesCount.textContent = `Quotes: ${quotes.length}`;
         container.innerHTML = getRenderedquotes(quotes);
         filterInput.addEventListener("input", (e) => {
             handleFilter(e, quotes);
@@ -87,7 +85,7 @@ const renderquotes = async() => {
         const retry = document.querySelector(".retry-wrapper a");
         retry.addEventListener("click", (e) => {
             e.preventDefault();
-            window.location.reload();
+            renderquotes();
         })
     }
     finally {

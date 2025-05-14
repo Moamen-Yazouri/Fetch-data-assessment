@@ -3,6 +3,7 @@ const filterInput = document.querySelector(".info-container .filter-input");
 const container = document.querySelector(".container");
 const loader = document.querySelector(".loader-container");
 const quotesCount = document.querySelector(".quotes-number");
+let debounceTimer;
 const getRenderedquotes = (data) => {
     const innerHTML = data.map((quote) => {
         return `
@@ -25,7 +26,6 @@ const getRenderedquotes = (data) => {
     return innerHTML;
 }
 const handleFilter = (e, quotes) => {
-        let debounceTimer;
         const value = e.target.value.toLowerCase();
         console.log(value);
         if(value !== "" && value) {

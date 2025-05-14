@@ -30,6 +30,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     padding: 1rem;
     background-color: #ffe4e6; 
     border: 1px solid #fca5a5; 
@@ -42,7 +43,7 @@
 .error {
     color: #b91c1c; 
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 2rem;
     margin: 0;
 }
 .container {
@@ -54,11 +55,7 @@
 }
 .filter-input {
     width: 100%;
-    position: sticky;
-    top: 10px;
-    z-index: 10;
     max-width: 400px;
-    margin: 1rem auto;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     border: 1px solid #ccc;
@@ -67,8 +64,22 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     transition: border 0.2s ease, box-shadow 0.2s ease;
 }
+.info-container {
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    padding-left: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.quotes-number {
+    font-size: 1rem;
+    color: #a855f7;
+    margin-top: 0.5rem;
 
-.filter-input.hidden {
+}
+.info-container.hidden {
     display: none;
 }
 .filter-input::placeholder {
@@ -97,6 +108,25 @@
 
 .loader.hidden {
     display: hidden;
+}
+
+.retry-wrapper {
+    display: block;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #7f1d1d;
+}
+.retry-wrapper a {
+    color: #a855f7; 
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.retry-wrapper a:hover {
+    color: #9333ea; 
+    text-shadow: 0 0 2px rgba(147, 51, 234, 0.5);
 }
 @keyframes spin {
     to {

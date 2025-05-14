@@ -1,69 +1,102 @@
-const filter = document.querySelector(".filter-input");
+const filter = document.querySelector(".info-container");
+const filterInput = document.querySelector(".info-container .filter-input");
 const container = document.querySelector(".container");
 const loader = document.querySelector(".loader-container");
-
-const getRenderedQoutes = (data) => {
+const quotesCount = document.querySelector(".quotes-number");
+const getRenderedquotes = (data) => {
     const innerHTML = data.map((quote) => {
         return `
             <div class="wrapper">
                 <p class="qoute">
                     ${quote.quote}
                 </p>
+                <span>
+                </span>
             </div>
         `
     }).join("") || `
             <div class="error-wrapper">
                 <p class="error">
-                    No Qoutes exists!
+                    No quotes exists!
                 </p>
             </div>
     `;
+    ;
     return innerHTML;
 }
-const handleFilter = (quotes) => {
-        filter.addEventListener("input", (e) => {
-        const value = e.target.value;
-        if(value) {
-            const filteredQoutes = quotes.filter((q) => q.quote.toLowerCase().includes(value.toLowerCase()));
-            container.innerHTML = getRenderedQoutes(filteredQoutes);
+const handleFilter = (e, quotes) => {
+        let debounceTimer;
+        const value = e.target.value.toLowerCase();
+        console.log(value);
+        if(value !== "" && value) {
+            quotesCount.textContent = "";
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const filteredquotes = quotes.filter((q) => q.quote.toLowerCase().includes(value));
+                if(filteredquotes.length === 0) {
+                    container.innerHTML = `
+                        <div class="error-wrapper">
+                            <p class="error">
+                                No Quotes matches!
+                            </p>
+                        </div> 
+                    `;
+                    quotesCount.textContent = `Matched Quotes: 0`;
+                    return;
+                }
+                container.innerHTML = getRenderedquotes(filteredquotes);
+                quotesCount.textContent = `Matched Quotes: ${filteredquotes.length}`;
+            }, 300);
         }
-        
-    })
+        else {
+            container.innerHTML = getRenderedquotes(quotes);
+            quotesCount.textContent = `Quotes ${quotes.length}`;
+        }
 }
-const renderQoutes = async() => {
-    const res = await fetch("https://dummyjson.com/quotes",
-        {
-            method: "GET",
-            headers: {
-                "Content-type": "application/json"
+const renderquotes = async() => {
+    try {
+        const res = await fetch("https://dummyjson.com/quotes",
+            {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json"
+                }
             }
-        }
     )
     if(res.ok) {
 
         const data = await res.json();
         const quotes = data.quotes;
-
         loader.classList.add("hidden");
         filter.classList.remove("hidden");
-
-        container.innerHTML = getRenderedQoutes(quotes);
-
-        handleFilter(quotes);
+        quotesCount.textContent = `Quotes ${quotes.length}`;
+        container.innerHTML = getRenderedquotes(quotes);
+        filterInput.addEventListener("input", (e) => {
+            handleFilter(e, quotes);
+        })
     }
-    else {
+    }
+    catch(err) {
         const faild = `
             <div class="error-wrapper">
                 <p class="error">
-                    Failed to fetch qoutes!
+                    Failed to fetch quotes!
                 </p>
+                <div class="retry-wrapper">Do you want to <a>retry</a> ?</div>
             </div>
         `;
-
-        loader.classList.add("hidden");
         container.innerHTML = faild;
+        const retry = document.querySelector(".retry-wrapper a");
+        retry.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.reload();
+        })
     }
+    finally {
+        loader.classList.add("hidden");
+    }
+
 }
 
-renderQoutes();
+renderquotes();
 

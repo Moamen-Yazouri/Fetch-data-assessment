@@ -27,10 +27,8 @@ const getRenderedquotes = (data) => {
 }
 const handleFilter = (e, quotes) => {
         const value = e.target.value.toLowerCase();
-        console.log(value);
+        clearTimeout(debounceTimer);
         if(value !== "" && value) {
-            quotesCount.textContent = "";
-            clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 const filteredquotes = quotes.filter((q) => q.quote.toLowerCase().includes(value));
                 if(filteredquotes.length === 0) {
@@ -50,7 +48,7 @@ const handleFilter = (e, quotes) => {
         }
         else {
             container.innerHTML = getRenderedquotes(quotes);
-            quotesCount.textContent = `Quotes ${quotes.length}`;
+            quotesCount.textContent = `Quotes: ${quotes.length}`;
         }
 }
 const renderquotes = async() => {
